@@ -12,43 +12,17 @@ namespace FileUpload.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        //accept directory name and create directory
         [HttpPost]
-        [Route("api/UploadMultipleFiles")]
-        public IActionResult UploadFiles(List<IFormFile> files, string FolderName)
+        [Route("api/CreateNewDirectory")]
+        public IActionResult CreateNewDirectory(string FolderName)
         {
-            if (files.Count == 0)
-                return BadRequest();
             string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, FolderName);
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            foreach (var file in files)
-            {
-                string filePath = Path.Combine(directoryPath, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-            }
-            return Ok("Upload Successfull");
-        }
-
-
-
-
-        [HttpPost]
-        [Route("api/CreateDirectory")]
-        public IActionResult CreateDirectory(string directoryName)
-        {
-            string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, directoryName);
             try
             {
-                if (!Directory.Exists(directoryName))
+                if (!Directory.Exists(directoryPath))
                 {
-                    Directory.CreateDirectory(directoryName);
+                    Directory.CreateDirectory(directoryPath);
                     return Ok("Directory created successfully");
                 }
                 else
@@ -62,40 +36,33 @@ namespace FileUpload.Controllers
             }
         }
 
+        //accept file to upload to new directory
         [HttpPost]
-        [Route("api/UploadFile")]
-        public IActionResult UploadFile(string filePath, string directoryName)
+        [Route("api/UploadFileToDirectory")]
+        public IActionResult UploadFile(IFormFile uploadFile, string FolderName)
         {
-            string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, directoryName);
-            //string filePath = Path.Combine(directoryPath, file.FileName);
-
             try
             {
-                if (Directory.Exists(directoryName))
+                string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, FolderName);
+                if (!Directory.Exists(directoryPath))
                 {
-                    var fileName = Path.GetFileName(filePath);
-                    var fullPath = Path.Combine(directoryName, fileName);
-                    if (System.IO.File.Exists(fullPath))
-                    {
-                        return BadRequest("File already exists in directory");
-                    }
-                    else
-                    {
-                        using (var fileStream = new FileStream(fullPath, FileMode.Create))
-                        {
-                            Request.Body.CopyToAsync(fileStream).Wait();
-                        }
-                        return Ok("File uploaded successfully");
-                    }
+                    Directory.CreateDirectory(directoryPath);
+                }
+                string filePath = Path.Combine(directoryPath, uploadFile.FileName);
+
+                /*var maxFileSize = 10 * 1024 * 1024; // 10 MB in bytes
+                if (Request.ContentLength > maxFileSize)
+                {
+                    return BadRequest($"File size should be less than 10 MB");
                 }
                 else
-                {
-                    if (!Directory.Exists(directoryName))
+                {*/
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        Directory.CreateDirectory(directoryName);
+                        uploadFile.CopyTo(stream);
                     }
-                    return Ok("Directory created successfully");
-                }
+                    return Ok("Upload Successfull");
+                //}
             }
             catch (Exception ex)
             {
@@ -103,6 +70,7 @@ namespace FileUpload.Controllers
             }
         }
 
+        //accept directory name to delete
         [HttpPost]
         [Route("api/DeleteDirectory")]
         public IActionResult DeleteDirectory(string directoryName)
@@ -110,9 +78,9 @@ namespace FileUpload.Controllers
             string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, directoryName);
             try
             {
-                if (Directory.Exists(directoryName))
+                if (Directory.Exists(directoryPath))
                 {
-                    Directory.Delete(directoryName, true);
+                    Directory.Delete(directoryPath, true);
                     return Ok("Directory deleted successfully");
                 }
                 else
@@ -125,6 +93,34 @@ namespace FileUpload.Controllers
                 return StatusCode(500, $"Error deleting directory: {ex.Message}");
             }
         }
-
     }
 }
+
+
+
+
+
+/*[HttpPost]
+       [Route("api/UploadMultipleFiles")]
+       public IActionResult UploadFiles(List<IFormFile> files, string FolderName)
+       {
+           if (files.Count == 0)
+               return BadRequest();
+           string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, FolderName);
+
+           if (!Directory.Exists(directoryPath))
+           {
+               Directory.CreateDirectory(directoryPath);
+           }
+
+           foreach (var file in files)
+           {
+               string filePath = Path.Combine(directoryPath, file.FileName);
+               using (var stream = new FileStream(filePath, FileMode.Create))
+               {
+                   file.CopyTo(stream);
+               }
+           }
+           return Ok("Upload Successfull");
+       }
+*/
