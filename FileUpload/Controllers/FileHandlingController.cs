@@ -50,19 +50,18 @@ namespace FileUpload.Controllers
                 }
                 string filePath = Path.Combine(directoryPath, uploadFile.FileName);
 
-                /*var maxFileSize = 10 * 1024 * 1024; // 10 MB in bytes
-                if (Request.ContentLength > maxFileSize)
+                if (uploadFile.Length < 10485760) //10 MB = 10 * 1024 * 1024 Bytes
                 {
-                    return BadRequest($"File size should be less than 10 MB");
-                }
-                else
-                {*/
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         uploadFile.CopyTo(stream);
                     }
                     return Ok("Upload Successfull");
-                //}
+                }
+                else
+                {
+                    return Ok("Cannot upload file. File size is greater than 10 MB.");
+                }
             }
             catch (Exception ex)
             {
