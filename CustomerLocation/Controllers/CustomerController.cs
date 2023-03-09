@@ -74,7 +74,7 @@ namespace CustomerController.Controllers
         //get customer by id
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<Customer> GetById(int id)
+        public ActionResult<Customer> Get(int id)
         {
             var response = new
             {
@@ -114,7 +114,7 @@ namespace CustomerController.Controllers
         /// </summary>
         //deleting customer
         [HttpDelete]
-        [Route("delete_customer/{id}")]
+        [Route("{id}")]
         public ActionResult<Customer> DeleteCustomer(int id)
         {
             var customer = customers.FirstOrDefault(c => c.Id == id);
