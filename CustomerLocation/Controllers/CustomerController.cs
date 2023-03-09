@@ -3,10 +3,9 @@ using CustomerLocation.Models;
 
 namespace CustomerController.Controllers
 {
-
     [Route("api/customer")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         public static List<Customer> customers = new List<Customer>();
         public static int nextId = 1;
@@ -142,7 +141,7 @@ namespace CustomerController.Controllers
         /// </summary>
         //deleting locations
         [HttpDelete]
-        [Route("delete_location/{customerId}/{locationId}")]
+        [Route("{customerId}/location/{locationId}")]
         public ActionResult DeleteLocation(int customerId, int locationId)
         {
             var customer = customers.FirstOrDefault(c => c.Id == customerId);
