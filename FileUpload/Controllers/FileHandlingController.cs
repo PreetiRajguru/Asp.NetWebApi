@@ -2,7 +2,7 @@
 
 namespace FileUpload.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/file")]
     [ApiController]
     public class FileHandlingController : ControllerBase
     {
@@ -12,9 +12,12 @@ namespace FileUpload.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        /// <summary>
+        /// Create Directory
+        /// </summary>
         //accept directory name and create directory
         [HttpPost]
-        [Route("api/CreateNewDirectory")]
+        [Route("create_directory")]
         public IActionResult CreateNewDirectory(string FolderName)
         {
             string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, FolderName);
@@ -36,9 +39,12 @@ namespace FileUpload.Controllers
             }
         }
 
+        /// <summary>
+        /// Upload file
+        /// </summary>
         //accept file to upload to new directory
         [HttpPost]
-        [Route("api/UploadFileToDirectory")]
+        [Route("upload_file_to_directory")]
         public IActionResult UploadFile(IFormFile uploadFile, string FolderName)
         {
             try
@@ -69,9 +75,12 @@ namespace FileUpload.Controllers
             }
         }
 
+        /// <summary>
+        /// Display all customers
+        /// </summary>
         //accept directory name to delete
-        [HttpPost]
-        [Route("api/DeleteDirectory")]
+        [HttpDelete]
+        [Route("delete_directory")]
         public IActionResult DeleteDirectory(string directoryName)
         {
             string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, directoryName);
@@ -94,32 +103,3 @@ namespace FileUpload.Controllers
         }
     }
 }
-
-
-
-
-
-/*[HttpPost]
-       [Route("api/UploadMultipleFiles")]
-       public IActionResult UploadFiles(List<IFormFile> files, string FolderName)
-       {
-           if (files.Count == 0)
-               return BadRequest();
-           string directoryPath = Path.Combine(_webHostEnvironment.ContentRootPath, FolderName);
-
-           if (!Directory.Exists(directoryPath))
-           {
-               Directory.CreateDirectory(directoryPath);
-           }
-
-           foreach (var file in files)
-           {
-               string filePath = Path.Combine(directoryPath, file.FileName);
-               using (var stream = new FileStream(filePath, FileMode.Create))
-               {
-                   file.CopyTo(stream);
-               }
-           }
-           return Ok("Upload Successfull");
-       }
-*/

@@ -4,42 +4,94 @@ using CustomerLocation.Models;
 namespace CustomerController.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/customer")]
     [ApiController]
     public class CustomersController : ControllerBase
     {
         public static List<Customer> customers = new List<Customer>();
-        public static int _nextId = 1;
+        public static int nextId = 1;
 
+        /// <summary>
+        /// Display all customers
+        /// </summary>
+        /// /// <returns>Displays a list of customers </returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///GET
+        ///[
+        ///{
+        ///"id": 0,
+        ///"name": "string",
+        ///"locations": [
+        /// {
+        /// "id": 0,
+        ///"address": "string"
+        ///}
+        ///]
+        /// }
+        ///]
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the customers list</response>
+        /// <response code="400">If the list is null</response>
+        /// <response code="404">If customer list is not found</response>
         //get all customers list
         [HttpGet]
-        [Route("api/GetListOfCustomers")]
         public ActionResult<IEnumerable<Customer>> Get()
         {
-            return Ok(customers);
+            //return Ok(customers);
+            var response = new
+            {
+                statusCode = 200,
+                message = "Fetching customers list",
+                data = customers
+            };
+            return new ObjectResult(response);
         }
 
+        /// <summary>
+        /// Create customer
+        /// </summary>
         //create customer
         [HttpPost]
-        [Route("api/CreateCustomer")]
+        [Route("create_customer")]
         public ActionResult<Customer> Create(Customer customer)
         {
-            customer.Id = _nextId++;
+            customer.Id = nextId++;
             customers.Add(customer);
-            return Ok("Customer Created and Added to the List");
+            var response = new
+            {
+                statusCode = 200,
+                message = "Customer created successfully",
+                data = customers
+            };
+            return new ObjectResult(response);
         }
 
+        /// <summary>
+        /// Get customer 
+        /// </summary>
         //get customer by id
         [HttpGet]
-        [Route("api/GetCustomerById")]
-        public ActionResult<Customer> GetById([FromQuery] int id)
+        [Route("{id}")]
+        public ActionResult<Customer> GetById(int id)
         {
-            return customers.Find(c => c.Id == id);
+            var response = new
+            {
+                statusCode = 200,
+                message = "Customer fetched successfully",
+                data = customers.Find(c => c.Id == id)
+            };
+            return new ObjectResult(response);
         }
 
-        //update customer as well as location
+        /// <summary>
+        /// Update customer
+        /// </summary>
+        //update customer 
         [HttpPut]
-        [Route("api/UpdateCustomer")]
+        [Route("update_customer/{id}")]
         public ActionResult UpdateCustomer(int id, Customer customer)
         {
             var existingCustomer = customers.FirstOrDefault(c => c.Id == id);
@@ -49,13 +101,22 @@ namespace CustomerController.Controllers
             }
             existingCustomer.Name = customer.Name;
             existingCustomer.Locations = customer.Locations;
-            return Ok($"Updated Customer");
+            var response = new
+            {
+                statusCode = 200,
+                message = "Update Customer Successful",
+                data = customers
+            };
+            return new ObjectResult(response);
         }
 
+        /// <summary>
+        /// Delete customer
+        /// </summary>
         //deleting customer
         [HttpDelete]
-        [Route("api/DeleteCustomer")]
-        public ActionResult<Customer> DeleteCustomer([FromQuery] int id)
+        [Route("delete_customer/{id}")]
+        public ActionResult<Customer> DeleteCustomer(int id)
         {
             var customer = customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)
@@ -67,12 +128,21 @@ namespace CustomerController.Controllers
                 return BadRequest("Cannot delete customer with locations");
             }
             customers.Remove(customer);
-            return Ok("Deleted Customer");
+            var response = new
+            {
+                statusCode = 200,
+                message = "Delete Customer Successful",
+                data = customers
+            };
+            return new ObjectResult(response);
         }
 
+        /// <summary>
+        /// Delete location 
+        /// </summary>
         //deleting locations
         [HttpDelete]
-        [Route("api/customers/locations")]
+        [Route("delete_location/{customerId}/{locationId}")]
         public ActionResult DeleteLocation(int customerId, int locationId)
         {
             var customer = customers.FirstOrDefault(c => c.Id == customerId);
@@ -86,27 +156,45 @@ namespace CustomerController.Controllers
                 return NotFound();
             }
             customer.Locations.Remove(location);
-            return Ok($"From Customer {customerId} removed location from {locationId}");
+            var response = new
+            {
+                statusCode = 200,
+                message = "Remove Location Successful",
+                data = customers
+            };
+            return new ObjectResult(response);
         }
 
 
-        //get location by customer id
+        /// <summary>
+        /// Get location 
+        /// </summary>
+        //get location 
         [HttpGet]
-        [Route("api/GetLocationByCustomerId")]
-        public ActionResult<Customer> GetLocationByCustomerId([FromQuery] int id)
+        [Route("location/{id}")]
+        public ActionResult<Customer> GetLocationByCustomerId(int id)
         {
             var customer = customers.FirstOrDefault(c => c.Id == id);
             if (customer == null)
             {
                 return NotFound();
             }
-            return Ok(customer.Locations);
+            var response = new
+            {
+                statusCode = 200,
+                message = "Get Location Successful",
+                data = customer.Locations
+            };
+            return new ObjectResult(response);
         }
 
-        //create location by customer id
+        /// <summary>
+        /// Create location 
+        /// </summary>
+        //create location 
         [HttpPost]
-        [Route("api/CreateLocationByCustomerId")]
-        public ActionResult PostCustomerLocation([FromQuery] int customerId, List<CustomerLocations> location)
+        [Route("create_location/{customerId}")]
+        public ActionResult PostCustomerLocation(int customerId, List<CustomerLocations> location)
         {
             var cust = customers.FirstOrDefault(c => c.Id == customerId);
             if (cust == null)
@@ -114,26 +202,43 @@ namespace CustomerController.Controllers
                 return NotFound();
             }
             cust.Locations = location;
-            return Ok(cust.Locations);
+            var response = new
+            {
+                statusCode = 200,
+                message = "Create Location Successful",
+                data = cust.Locations
+            };
+            return new ObjectResult(response);
         }
 
         //update location by customer id
-        /*[HttpPost]
-        [Route("api/UpdateLocationByCustomerId")]
-        public ActionResult UpdateCustomerLocation([FromQuery] int customerId,[FromQuery] int locationId, List<CustomerLocations> location)
+        /// <summary>
+        /// Update location 
+        /// </summary>
+        [HttpPut]
+        [Route("update_location/{custid}/{locnid}")]
+        public ActionResult<Customer> UpdateCustomerLocation(int custid, int locnid, [FromBody] CustomerLocations location)
         {
-            var cust = customers.FirstOrDefault(c => c.Id == customerId);
-            if (cust == null)
+            foreach (var customer in customers)
             {
-                return NotFound();
+                if (customer.Id == custid)
+                {
+                    if (customer.Locations != null)
+                    {
+                        foreach (var currentLocation in customer.Locations)
+                        {
+                            if (currentLocation.Id == locnid)
+                            {
+                                currentLocation.Id = location.Id;
+                                currentLocation.Address = location.Address;
+                                return Ok(currentLocation);
+                            }
+                            return Ok("Location not found");
+                        }
+                    }
+                }
             }
-            var locn = cust.Locations.FirstOrDefault(l => l.Id == locationId);
-            if (locn == null)
-            {
-                return NotFound();
-            }
-            cust.Locations = location;
-            return Ok(cust.Locations);
-        }*/
+            return BadRequest("Customer not found");
+        }
     }
 }
