@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CustomerLocation</name>
+    </assembly>
+    <members>
+        <member name="M:CustomerController.Controllers.CustomerController.Get">
+             <summary>
+             Display all customers
+             </summary>
+             /// <returns>Displays a list of customers </returns>
+             <remarks>
+             Sample request:
+            
+            GET
+            [
+            {
+            "id": 0,
+            "name": "string",
+            "locations": [
+             {
+             "id": 0,
+            "address": "string"
+            }
+            ]
+             }
+            ]
+            
+             </remarks>
+             <response code="200">Returns the customers list</response>
+             <response code="400">If the list is null</response>
+             <response code="404">If customer list is not found</response>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.Create(CustomerLocation.Models.Customer)">
+            <summary>
+            Create customer
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.Get(System.Int32)">
+            <summary>
+            Get customer 
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.UpdateCustomer(System.Int32,CustomerLocation.Models.Customer)">
+            <summary>
+            Update customer
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.DeleteCustomer(System.Int32)">
+            <summary>
+            Delete customer
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.DeleteLocation(System.Int32,System.Int32)">
+            <summary>
+            Delete location 
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.GetLocationByCustomerId(System.Int32)">
+            <summary>
+            Get location 
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.PostCustomerLocation(System.Int32,System.Collections.Generic.List{CustomerLocation.Models.CustomerLocations})">
+            <summary>
+            Create location 
+            </summary>
+        </member>
+        <member name="M:CustomerController.Controllers.CustomerController.UpdateCustomerLocation(System.Int32,System.Int32,CustomerLocation.Models.CustomerLocations)">
+            <summary>
+            Update location 
+            </summary>
+        </member>
+    </members>
+</doc>
