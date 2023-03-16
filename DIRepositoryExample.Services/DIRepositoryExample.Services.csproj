@@ -159,6 +159,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\CustomerLocationDto.cs" />
     <Compile Include="Helper\CustomerHelper.cs" />
     <Compile Include="Interfaces\ICustomer.cs" />
     <Compile Include="Interfaces\ILocation.cs" />

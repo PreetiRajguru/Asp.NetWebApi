@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using DIRepositoryExample.Services.Interfaces;
+using DIRepositoryExample.Services.Dtos;
 
 namespace DIRepositoryExample.WebApi.Controllers
 {
@@ -71,18 +72,17 @@ namespace DIRepositoryExample.WebApi.Controllers
 
         //update location by customer id
         [HttpPut]
-        [Route("{customerId}/{locationId}")]
-        public IActionResult Update(int customerId, int locationId, [FromBody] CustomerLocations location)
+        [Route("{id}")]
+        public IActionResult Update(int id, [FromBody] CustomerLocationDto location)
         {
             if (ModelState.IsValid)
             {
-                var id = _customerService.UpdateLocation(customerId, locationId, location);
-                //_customerService.UpdateLocation(customerId, locationId, location);
+                var idRes = _customerService.UpdateLocation(location.CustomerId, id, new CustomerLocations{ Id=location.Id,Address=location.Address });
                 return Ok(new
                 {
                     message = "Updated Location in Customer List",
                     statusCode = StatusCodes.Status200OK,
-                    result = id
+                    result = idRes
                 });
             }
             return BadRequest(new
