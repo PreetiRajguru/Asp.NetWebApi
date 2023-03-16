@@ -5,9 +5,9 @@ namespace DIRepositoryExample.Services.Interfaces
 {
     public interface ILocation
     {
-        int CreateLocation(int customerId, CustomerLocations location);
-        int UpdateLocation(int customerId, int locationId, CustomerLocations location);
+        int CreateLocation(int customerId, CustomerLocation location);
+        int UpdateLocation(int customerId, int locationId, CustomerLocation location);
         void DeleteLocation(int customerId, int locationId);
-        List<CustomerLocations> GetLocationsByCustomerId(int customerId);
+        List<CustomerLocation> GetById(int customerId);
     }
 }

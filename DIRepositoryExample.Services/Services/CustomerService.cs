@@ -26,7 +26,7 @@ namespace DIRepositoryExample.Services.Services
 
         public int Update(int id, Customer customer)
         {
-            var existingCustomer = CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
+            Customer existingCustomer = CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
             if (existingCustomer != null)
             {
                 existingCustomer.Name = customer.Name;
@@ -37,7 +37,7 @@ namespace DIRepositoryExample.Services.Services
 
         public void Delete(int id)
         {
-            var customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
+            Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
             if (customer != null)
             {
                 customer.Locations.Clear();

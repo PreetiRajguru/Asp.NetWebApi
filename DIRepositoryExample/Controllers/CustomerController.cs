@@ -61,12 +61,12 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id = _customerService.Create(customer);
+                int response = _customerService.Create(customer);
                 return Ok(new
                 {
                     message = "Created Customer",
                     statusCode = StatusCodes.Status200OK,
-                    result = id
+                    result = response
                 });
             }
             return BadRequest(new
@@ -83,12 +83,12 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var Id = _customerService.Update(id, customer);
+                int response = _customerService.Update(id, customer);
                 return Ok(new
                 {
                     message = "Updated Customer",
                     statusCode = StatusCodes.Status200OK,
-                    result = Id
+                    result = response
                 });
             }
             return BadRequest(new

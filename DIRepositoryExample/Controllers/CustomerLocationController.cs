@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using DIRepositoryExample.Services.Interfaces;
-using DIRepositoryExample.Services.Dtos;
+using DIRepositoryExample.Services.DTO;
 
 namespace DIRepositoryExample.WebApi.Controllers
 {
@@ -17,7 +17,7 @@ namespace DIRepositoryExample.WebApi.Controllers
             _customerService = customerService;
         }
 
-        //get location by customer id
+        //get locations by customer id
         [HttpGet]
         [Route("{customerId}")]
         public IActionResult GetById(int customerId)
@@ -45,21 +45,20 @@ namespace DIRepositoryExample.WebApi.Controllers
             });
         }
 
-
         //add location to customer
         [HttpPost]
         [Route("")]
-        public IActionResult Create([FromBody] CustomerLocationDto location)
+        public IActionResult Create([FromBody] CustomerLocationDTO location)
 
         {
             if (ModelState.IsValid)
             {
-                var idRes = _customerService.CreateLocation(location.CustomerId, new CustomerLocations { Id = location.Id, Address = location.Address });
+                int response = _customerService.CreateLocation(location.CustomerId, new CustomerLocation { Id = location.Id, Address = location.Address });
                 return Ok(new
                 {
                     message = "Location Added to Customer List",
                     statusCode = StatusCodes.Status200OK,
-                    result = idRes
+                    result = response
                 });
             }
             return BadRequest(new
@@ -73,16 +72,16 @@ namespace DIRepositoryExample.WebApi.Controllers
         //update location by customer id
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Update(int id, [FromBody] CustomerLocationDto location)
+        public IActionResult Update(int id, [FromBody] CustomerLocationDTO location)
         {
             if (ModelState.IsValid)
             {
-                var idRes = _customerService.UpdateLocation(location.CustomerId, id, new CustomerLocations { Id = location.Id, Address = location.Address });
+                int response = _customerService.UpdateLocation(location.CustomerId, id, new CustomerLocation { Id = location.Id, Address = location.Address });
                 return Ok(new
                 {
                     message = "Updated Location in Customer List",
                     statusCode = StatusCodes.Status200OK,
-                    result = idRes
+                    result = response
                 });
             }
             return BadRequest(new

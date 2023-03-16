@@ -1,8 +1,8 @@
 ﻿namespace DIRepositoryExample.Services.Services
 {
-    public class CustomerLocations
+    public class CustomerLocation
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Address { get; set; }
     }
 }

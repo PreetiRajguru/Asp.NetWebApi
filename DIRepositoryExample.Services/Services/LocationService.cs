@@ -6,9 +6,9 @@ namespace DIRepositoryExample.Services.Services
 {
     public class LocationService : ILocation
     {
-        public int CreateLocation(int customerId, CustomerLocations location)
+        public int CreateLocation(int customerId, CustomerLocation location)
         {
-            var customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
+            Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
             if (customer != null)
             {
                 customer.Locations.Add(location);
@@ -16,12 +16,12 @@ namespace DIRepositoryExample.Services.Services
             return (int)customer.Id;
         }
 
-        public int UpdateLocation(int customerId, int locationId, CustomerLocations location)
+        public int UpdateLocation(int customerId, int locationId, CustomerLocation location)
         {
-            var customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
+            Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
             if (customer != null)
             {
-                var existingLocation = customer.Locations.FirstOrDefault(l => l.Id == locationId);
+                CustomerLocation existingLocation = customer.Locations.FirstOrDefault(l => l.Id == locationId);
                 if (existingLocation != null)
                 {
                     existingLocation.Id = locationId;
@@ -33,10 +33,10 @@ namespace DIRepositoryExample.Services.Services
 
         public void DeleteLocation(int customerId, int locationId)
         {
-            var customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
+            Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
             if (customer != null)
             {
-                var location = customer.Locations.FirstOrDefault(l => l.Id == locationId);
+                CustomerLocation location = customer.Locations.FirstOrDefault(l => l.Id == locationId);
                 if (location != null)
                 {
                     customer.Locations.Remove(location);
@@ -44,14 +44,13 @@ namespace DIRepositoryExample.Services.Services
             }
         }
 
-        public List<CustomerLocations> GetLocationsByCustomerId(int customerId)
+        public List<CustomerLocation> GetById(int customerId)
         {
-            var customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
+            Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
             if (customer != null)
             {
                 return customer.Locations;
             }
-
             return null;
         }
     }
