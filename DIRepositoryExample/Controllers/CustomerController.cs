@@ -3,7 +3,7 @@ using DIRepositoryExample.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 namespace DIRepositoryExample.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/customer")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
@@ -61,7 +61,7 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var id= _customerService.Create(customer);
+                var id = _customerService.Create(customer);
                 return Ok(new
                 {
                     message = "Created Customer",

@@ -6,7 +6,7 @@ using DIRepositoryExample.Services.Dtos;
 
 namespace DIRepositoryExample.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/location")]
     [ApiController]
     public class CustomerLocationController : ControllerBase
     {
@@ -48,18 +48,18 @@ namespace DIRepositoryExample.WebApi.Controllers
 
         //add location to customer
         [HttpPost]
-        [Route("{customerId}")]
-        public IActionResult Create(int customerId, [FromBody] CustomerLocations location)
+        [Route("")]
+        public IActionResult Create([FromBody] CustomerLocationDto location)
+
         {
             if (ModelState.IsValid)
             {
-                var id = _customerService.CreateLocation(customerId, location);
-                //_customerService.CreateLocation(customerId, location);
+                var idRes = _customerService.CreateLocation(location.CustomerId, new CustomerLocations { Id = location.Id, Address = location.Address });
                 return Ok(new
                 {
                     message = "Location Added to Customer List",
                     statusCode = StatusCodes.Status200OK,
-                    result = id
+                    result = idRes
                 });
             }
             return BadRequest(new
@@ -77,7 +77,7 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var idRes = _customerService.UpdateLocation(location.CustomerId, id, new CustomerLocations{ Id=location.Id,Address=location.Address });
+                var idRes = _customerService.UpdateLocation(location.CustomerId, id, new CustomerLocations { Id = location.Id, Address = location.Address });
                 return Ok(new
                 {
                     message = "Updated Location in Customer List",
