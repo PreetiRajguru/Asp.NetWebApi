@@ -31,7 +31,7 @@ namespace DIRepositoryExample.Services.Services
             return (int)customer.Id;
         }
 
-        public void DeleteLocation(int customerId, int locationId)
+        public bool DeleteLocation(int customerId, int locationId)
         {
             Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == customerId);
             if (customer != null)
@@ -40,8 +40,10 @@ namespace DIRepositoryExample.Services.Services
                 if (location != null)
                 {
                     customer.Locations.Remove(location);
+                    return true;
                 }
             }
+            return false;
         }
 
         public List<CustomerLocation> GetById(int customerId)

@@ -9,7 +9,9 @@ namespace DIRepositoryExample.Services.Services
         {
             this.Locations = new List<CustomerLocation>();
         }
+        [Required]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public List<CustomerLocation> Locations { get; set; }

@@ -7,7 +7,7 @@ namespace DIRepositoryExample.Services.Interfaces
     {
         int CreateLocation(int customerId, CustomerLocation location);
         int UpdateLocation(int customerId, int locationId, CustomerLocation location);
-        void DeleteLocation(int customerId, int locationId);
+        bool DeleteLocation(int customerId, int locationId);
         List<CustomerLocation> GetById(int customerId);
     }
 }
