@@ -18,19 +18,11 @@ namespace DIRepositoryExample.WebApi.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            if (ModelState.IsValid)
+            return Ok(new
             {
-                return Ok(new
-                {
-                    message = "Customer List",
-                    statusCode = StatusCodes.Status200OK,
-                    result = _customerService.GetAll()
-                });
-            }
-            return BadRequest(new
-            {
-                message = "Something Went Wrong",
-                statusCode = StatusCodes.Status400BadRequest
+                message = "Customer List",
+                statusCode = StatusCodes.Status200OK,
+                result = _customerService.GetAll()
             });
         }
 
@@ -39,19 +31,11 @@ namespace DIRepositoryExample.WebApi.Controllers
         [Route("{id}")]
         public ActionResult<Customer> GetById(int id)
         {
-            if (ModelState.IsValid)
+            return Ok(new
             {
-                return Ok(new
-                {
-                    message = $"Customer at {id}",
-                    statusCode = StatusCodes.Status200OK,
-                    result = _customerService.GetById(id)
-                });
-            }
-            return BadRequest(new
-            {
-                message = "Something Went Wrong",
-                statusCode = StatusCodes.Status400BadRequest
+                message = $"Customer at {id}",
+                statusCode = StatusCodes.Status200OK,
+                result = _customerService.GetById(id)
             });
         }
 
@@ -103,21 +87,12 @@ namespace DIRepositoryExample.WebApi.Controllers
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            if (ModelState.IsValid)
+            _customerService.Delete(id);
+            return Ok(new
             {
-                _customerService.Delete(id);
-                return Ok(new
-                {
-                    message = $"Customer at {id} deleted",
-                    statusCode = StatusCodes.Status200OK,
-                });
-            }
-            return BadRequest(new
-            {
-                message = "Something Went Wrong",
-                statusCode = StatusCodes.Status400BadRequest
+                message = $"Customer at {id} deleted",
+                statusCode = StatusCodes.Status200OK,
             });
         }
-
     }
 }

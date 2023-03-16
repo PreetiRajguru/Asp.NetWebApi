@@ -22,34 +22,24 @@ namespace DIRepositoryExample.WebApi.Controllers
         [Route("{customerId}")]
         public IActionResult GetById(int customerId)
         {
-            if (ModelState.IsValid)
+            var locations = _customerService.GetById(customerId);
+            if (locations == null)
             {
-                var locations = _customerService.GetLocationsByCustomerId(customerId);
-                if (locations == null)
-                {
-                    return NotFound();
-                }
-
-                var locationValue = new StringBuilder();
-                foreach (var location in locations)
-                {
-                    locationValue.AppendLine($"Location Id : {location.Id}\n Location : {location.Address}");
-                }
-
-                return Content(locationValue.ToString(), "text/plain");
+                return NotFound();
             }
-            return BadRequest(new
+
+            var locationValue = new StringBuilder();
+            foreach (var location in locations)
             {
-                message = "Something Went Wrong",
-                statusCode = StatusCodes.Status400BadRequest
-            });
+                locationValue.AppendLine($"Location Id : {location.Id}\n Location : {location.Address}");
+            }
+            return Content(locationValue.ToString(), "text/plain");
         }
 
         //add location to customer
         [HttpPost]
         [Route("")]
         public IActionResult Create([FromBody] CustomerLocationDTO location)
-
         {
             if (ModelState.IsValid)
             {
@@ -96,20 +86,12 @@ namespace DIRepositoryExample.WebApi.Controllers
         [Route("{customerId}/{locationId}")]
         public IActionResult Delete(int customerId, int locationId)
         {
-            if (ModelState.IsValid)
+            _customerService.DeleteLocation(customerId, locationId);
+            return Ok(new
             {
-                _customerService.DeleteLocation(customerId, locationId);
-                return Ok(new
-                {
-                    message = "Location Deleted",
-                    statusCode = StatusCodes.Status200OK,
-                    result = customerId
-                });
-            }
-            return BadRequest(new
-            {
-                message = "Something Went Wrong",
-                statusCode = StatusCodes.Status400BadRequest
+                message = "Location Deleted",
+                statusCode = StatusCodes.Status200OK,
+                result = customerId
             });
         }
     }
