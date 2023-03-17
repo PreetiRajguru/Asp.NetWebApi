@@ -9,6 +9,6 @@ namespace DIRepositoryExample.Services.Interfaces
         Customer GetById(int id);
         int Create(Customer customer);
         int Update(int id, Customer customer);
-        void Delete(int id);
+        bool Delete(int id);
     }
 }

@@ -14,14 +14,14 @@ namespace DIRepositoryExample.Services.Services
 
         public Customer GetById(int id)
         {
-            return CustomerHelper.customers.Find(c => c.Id == id);
+            return CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
         }
 
         public int Create(Customer customer)
         {
             customer.Id = CustomerHelper.nextId++;
             CustomerHelper.customers.Add(customer);
-            return (int)customer.Id;
+            return customer.Id;
         }
 
         public int Update(int id, Customer customer)
@@ -32,10 +32,10 @@ namespace DIRepositoryExample.Services.Services
                 existingCustomer.Name = customer.Name;
                 existingCustomer.Locations = customer.Locations;
             }
-            return (int)customer.Id;
+            return customer.Id;
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             Customer customer = CustomerHelper.customers.FirstOrDefault(c => c.Id == id);
             if (customer != null)
@@ -43,6 +43,7 @@ namespace DIRepositoryExample.Services.Services
                 customer.Locations.Clear();
                 CustomerHelper.customers.Remove(customer);
             }
+            return false;
         }
     }
 }

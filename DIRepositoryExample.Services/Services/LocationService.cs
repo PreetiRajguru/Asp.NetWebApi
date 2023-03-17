@@ -13,7 +13,7 @@ namespace DIRepositoryExample.Services.Services
             {
                 customer.Locations.Add(location);
             }
-            return (int)customer.Id;
+            return customer.Id;
         }
 
         public int UpdateLocation(int customerId, int locationId, CustomerLocation location)
@@ -28,7 +28,7 @@ namespace DIRepositoryExample.Services.Services
                     existingLocation.Address = location.Address;
                 }
             }
-            return (int)customer.Id;
+            return customer.Id;
         }
 
         public bool DeleteLocation(int customerId, int locationId)

@@ -20,7 +20,7 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             return Ok(new
             {
-                message = "Customer List",
+                message = ConstantMessages.customerList,
                 statusCode = StatusCodes.Status200OK,
                 result = _customerService.GetAll()
             });
@@ -33,7 +33,7 @@ namespace DIRepositoryExample.WebApi.Controllers
         {
             return Ok(new
             {
-                message = $"Customer at {id}",
+                message = ConstantMessages.customerId,
                 statusCode = StatusCodes.Status200OK,
                 result = _customerService.GetById(id)
             });
@@ -48,14 +48,14 @@ namespace DIRepositoryExample.WebApi.Controllers
                 int response = _customerService.Create(customer);
                 return Ok(new
                 {
-                    message = "Created Customer",
+                    message = ConstantMessages.customerCreated,
                     statusCode = StatusCodes.Status200OK,
                     result = response
                 });
             }
             return BadRequest(new
             {
-                message = "Something Went Wrong",
+                message = ConstantMessages.errMessage,
                 statusCode = StatusCodes.Status400BadRequest
             });
         }
@@ -70,14 +70,14 @@ namespace DIRepositoryExample.WebApi.Controllers
                 int response = _customerService.Update(id, customer);
                 return Ok(new
                 {
-                    message = "Updated Customer",
+                    message = ConstantMessages.customerUpdated,
                     statusCode = StatusCodes.Status200OK,
                     result = response
                 });
             }
             return BadRequest(new
             {
-                message = "Something Went Wrong",
+                message = ConstantMessages.errMessage,
                 statusCode = StatusCodes.Status400BadRequest
             });
         }
@@ -87,12 +87,17 @@ namespace DIRepositoryExample.WebApi.Controllers
         [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            _customerService.Delete(id);
-            return Ok(new
+            return _customerService.Delete(id)
+            ? Ok(new
             {
-                message = $"Customer at {id} deleted",
+                message = ConstantMessages.customerDeleted,
                 statusCode = StatusCodes.Status200OK,
-            });
+            })
+            : BadRequest(new
+              {
+                  message = ConstantMessages.errMessage,
+                  statusCode = StatusCodes.Status400BadRequest
+              });
         }
     }
 }
